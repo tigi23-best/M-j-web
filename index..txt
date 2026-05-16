@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hyundai Glovis - Cloud Portál</title>
+    <style>
+        :root {
+            --primary-color: #002c5f; /* Hyundai tmavě modrá */
+            --accent-color: #00aad2; /* Hyundai světle modrá */
+            --bg-color: #e6e9ef;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0; padding: 20px;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+        }
+
+        .logo-container { text-align: center; margin-bottom: 20px; }
+        .logo-container img { max-width: 220px; height: auto; }
+
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; width: 100%; max-width: 550px; }
+        .tab-btn {
+            flex: 1; padding: 12px; background: #ccc; border: none;
+            border-radius: 8px 8px 0 0; cursor: pointer; font-weight: bold;
+            font-size: 1rem; color: #555; transition: 0.3s;
+        }
+        .tab-btn.active {
+            background: white; color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .container {
+            background: white; padding: 2rem; border-radius: 0 0 12px 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1); width: 100%; max-width: 550px; box-sizing: border-box;
+        }
+
+        .page { display: none; }
+        .page.active { display: block; }
+
+        h2 { color: var(--primary-color); text-align: center; margin-top: 0; }
+        p { color: #666; font-size: 0.9rem; }
+
+        textarea {
+            width: 100%; height: 150px; margin: 15px 0; padding: 12px;
+            border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; resize: none; font-size: 1rem;
+        }
+        .main-btn {
+            background-color: var(--primary-color); color: white; border: none;
+            padding: 15px 25px; border-radius: 8px; cursor: pointer;
+            font-size: 1.1rem; font-weight: bold; width: 100%; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;
+        }
+        .main-btn:hover { background-color: #004085; }
+        #vysledek {
+            margin-top: 25px; font-size: 1.8rem; font-weight: bold; text-align: center;
+            min-height: 2.2em; padding: 15px; background-color: #f9f9f9; border-radius: 8px;
+        }
+        .highlight { color: var(--accent-color); text-transform: uppercase; display: block; margin-top: 5px; }
+
+        .form-row { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        .input-group { display: flex; gap: 10px; }
+        input[type="text"] { flex: 1; padding: 10px; border: 2px solid #ddd; border-radius: 6px; font-size: 1rem; }
+        
+        .options-group { display: flex; flex-wrap: wrap; gap: 15px; background: #f5f5f5; padding: 10px; border-radius: 6px; align-items: center; }
+        .options-group label { font-size: 0.85rem; color: #444; display: flex; align-items: center; gap: 5px; cursor: pointer; }
+        input[type="date"] { padding: 3px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; }
+
+        ul { list-style: none; padding: 0; margin: 0; }
+        li {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px; background: #f9f9f9; border-bottom: 1px solid #eee; border-radius: 6px; margin-bottom: 8px;
+        }
+        .task-left { display: flex; align-items: center; gap: 10px; }
+        .completed { text-decoration: line-through; color: #aaa; }
+        .badge { font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        .badge-daily { background: #e1f5fe; color: #0288d1; }
+        .badge-date { background: #efebe9; color: #5d4037; }
+        .delete-btn { background: none; border: none; color: #ff5252; cursor: pointer; font-size: 1.3rem; }
+        .delete-btn:hover { color: #b71c1c; }
+
+        footer { margin-top: auto; padding: 20px; color: #777; font-size: 0.85rem; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="logo-container">
+        <img src="https://www.glovis.cz/wp-content/uploads/2021/04/logo_glovis_czech.png" alt="Hyundai Glovis Logo">
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab('losovac-page', this)">Losovač jmen</button>
+        <button class="tab-btn" onclick="openTab('ukoly-page', this)">Úkolovník (Cloud)</button>
+    </div>
+
+    <div class="container">
+        <div id="losovac-page" class="page active">
+            <h2>Vylosovat pracovníka</h2>
+            <p>Vložte jména (každé na nový řádek):</p>
+            <textarea id="seznamJmen" placeholder="Petr Novák&#10;Jana Malá..."></textarea>
+            <button class="main-btn" onclick="losovat()">Vylosovat!</button>
+            <div id="vysledek"></div>
+        </div>
+
+        <div id="ukoly-page" class="page">
+            <h2>Můj Úkolovník</h2>
+            <div class="form-row">
+                <div class="input-group">
+                    <input type="text" id="taskInput" placeholder="Napiš nový úkol...">
+                    <button class="main-btn" style="width: auto; padding: 10px 20px;" onclick="addInputTask()">Přidat</button>
+                </div>
+                <div class="options-group">
+                    <label><input type="radio" name="term" value="daily" checked onclick="toggleDateInput(false)"> Opakovat denně</label>
+                    <label><input type="radio" name="term" value="week" onclick="toggleDateInput(false)"> Za týden</label>
+                    <label><input type="radio" name="term" value="custom" id="customRadio" onclick="toggleDateInput(true)"> Vybrat datum:</label>
+                    <input type="date" id="dateInput" disabled>
+                </div>
+            </div>
+            <ul id="taskList"></ul>
+        </div>
+    </div>
+
+    <footer>Created by Thiago | &copy; 2026</footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // Tvoje údaje z Firebase projektu "Muj-portal"
+        const firebaseConfig = {
+            databaseURL: "https://muj-portal-default-rtdb.europe-west1.firebasedatabase.app"
+        };
+
+        // Inicializace Firebase
+        const app = initializeApp(firebaseConfig);
+ apiKey: "AIzaSyB9LpBSjpwbNAH79_xI_7dx3NHi5iOIc7M",
+  authDomain: "muj-portal.firebaseapp.com",
+  databaseURL: "https://muj-portal-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "muj-portal",
+  storageBucket: "muj-portal.firebasestorage.app",
+  messagingSenderId: "358183059319",
+  appId: "1:358183059319:web:62e557d8d29b4ef4672b72",
+  measurementId: "G-43DDB200DX"
+};
+        const db = getDatabase(app);
+        const tasksRef = ref(db, 'tasks/');
+
+        let tasks = [];
+
+        // NAČÍTÁNÍ Z DATABÁZE V REÁLNÉM ČASE
+        onValue(tasksRef, (snapshot) => {
+            const data = snapshot.val();
+            tasks = data ? Object.values(data) : [];
+            checkNewDay();
+            renderTasks();
+        });
+
+        // Kontrola nového dne
+        function checkNewDay() {
+            const today = new Date().toDateString();
+            const lastCheckedDate = localStorage.getItem('thiago_cloud_date') || "";
+            
+            if (lastCheckedDate !== today && lastCheckedDate !== "" && tasks.length > 0) {
+                let changed = false;
+                tasks.forEach(task => {
+                    if (task.type === 'daily' && task.completed === true) {
+                        task.completed = false;
+                        changed = true;
+                    }
+                });
+                if (changed) saveTasksToCloud();
+            }
+            localStorage.setItem('thiago_cloud_date', today);
+        }
+
+        // Vykreslení úkolů
+        window.renderTasks = function() {
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = "";
+
+            tasks.forEach((task, index) => {
+                const li = document.createElement('li');
+                const leftDiv = document.createElement('div');
+                leftDiv.className = "task-left";
+
+                const checkbox = document.createElement('input');
+                checkbox.type = "checkbox";
+                checkbox.checked = task.completed;
+                checkbox.onclick = () => toggleTask(index);
+
+                const span = document.createElement('span');
+                span.textContent = task.text;
+                if (task.completed) span.className = "completed";
+
+                leftDiv.appendChild(checkbox);
+                leftDiv.appendChild(span);
+
+                const badge = document.createElement('span');
+                if (task.type === 'daily') {
+                    badge.className = "badge badge-daily";
+                    badge.textContent = "Denní";
+                } else {
+                    badge.className = "badge badge-date";
+                    badge.textContent = new Date(task.dueDate).toLocaleDateString('cs-CZ');
+                }
+                leftDiv.appendChild(badge);
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = "delete-btn";
+                deleteBtn.innerHTML = "&times;";
+                deleteBtn.onclick = () => deleteTask(index);
+
+                li.appendChild(leftDiv);
+                li.appendChild(deleteBtn);
+                taskList.appendChild(li);
+            });
+        }
+
+        // Přidání úkolu
+        window.addInputTask = function() {
+            const input = document.getElementById('taskInput');
+            if (input.value.trim() === "") return;
+
+            const termType = document.querySelector('input[name="term"]:checked').value;
+            let dueDate = null;
+            let type = 'daily';
+
+            if (termType === 'week') {
+                type = 'date';
+                let targetDate = new Date();
+                targetDate.setDate(targetDate.getDate() + 7);
+                dueDate = targetDate.toISOString();
+            } else if (termType === 'custom') {
+                type = 'date';
+                const dateVal = document.getElementById('dateInput').value;
+                if (!dateVal) { alert("Vyberte datum!"); return; }
+                dueDate = new Date(dateVal).toISOString();
+            }
+
+            const id = "task_" + Date.now();
+            const newTask = { id: id, text: input.value.trim(), completed: false, type: type, dueDate: dueDate };
+            
+            set(ref(db, 'tasks/' + id), newTask);
+            input.value = "";
+            document.getElementById('dateInput').value = "";
+        }
+
+        window.toggleTask = function(index) {
+            tasks[index].completed = !tasks[index].completed;
+            saveTasksToCloud();
+        }
+
+        window.deleteTask = function(index) {
+            const taskId = tasks[index].id;
+            set(ref(db, 'tasks/' + taskId), null);
+        }
+
+        function saveTasksToCloud() {
+            const updateObj = {};
+            tasks.forEach(task => { updateObj[task.id] = task; });
+            set(tasksRef, updateObj);
+        }
+    </script>
+
+    <script>
+        // --- POMOCNÉ FUNKCE PRO STRÁNKU ---
+        function openTab(pageId, btn) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        function toggleDateInput(enable) { document.getElementById('dateInput').disabled = !enable; }
+
+        function losovat() {
+            const text = document.getElementById('seznamJmen').value;
+            const jmena = text.split('\n').map(j => j.trim()).filter(j => j !== "");
+            const vysledekDiv = document.getElementById('vysledek');
+
+            if (jmena.length === 0) { vysledekDiv.innerHTML = "Vložte jména!"; return; }
+            const vyherce = jmena[Math.floor(Math.random() * jmena.length)];
+            vysledekDiv.innerHTML = `Vybrán:<br><span class="highlight">${vyherce}</span>`;
+        }
+    </script>
+</body>
+</html>
