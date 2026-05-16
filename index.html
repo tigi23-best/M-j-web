@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hyundai Glovis - Portál Thiago</title>
+    <title>Hyundai Glovis - Cloud Portál</title>
     <style>
         :root {
             --primary-color: #002c5f; /* Hyundai tmavě modrá */
@@ -15,59 +15,27 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            margin: 0; padding: 20px;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
         }
 
-        /* Logo firmy nahoře */
-        .logo-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .logo-container img {
-            max-width: 220px;
-            height: auto;
-        }
+        .logo-container { text-align: center; margin-bottom: 20px; }
+        .logo-container img { max-width: 220px; height: auto; }
 
-        /* Přepínač záložek (Tabs) */
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            width: 100%;
-            max-width: 550px;
-        }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; width: 100%; max-width: 550px; }
         .tab-btn {
-            flex: 1;
-            padding: 12px;
-            background: #ccc;
-            border: none;
-            border-radius: 8px 8px 0 0;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1rem;
-            color: #555;
-            transition: 0.3s;
+            flex: 1; padding: 12px; background: #ccc; border: none;
+            border-radius: 8px 8px 0 0; cursor: pointer; font-weight: bold;
+            font-size: 1rem; color: #555; transition: 0.3s;
         }
         .tab-btn.active {
-            background: white;
-            color: var(--primary-color);
+            background: white; color: var(--primary-color);
             border-bottom: 3px solid var(--primary-color);
         }
 
-        /* Hlavní kontejner */
         .container {
-            background: white;
-            padding: 2rem;
-            border-radius: 0 0 12px 12px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 550px;
-            box-sizing: border-box;
+            background: white; padding: 2rem; border-radius: 0 0 12px 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1); width: 100%; max-width: 550px; box-sizing: border-box;
         }
 
         .page { display: none; }
@@ -76,17 +44,14 @@
         h2 { color: var(--primary-color); text-align: center; margin-top: 0; }
         p { color: #666; font-size: 0.9rem; }
 
-        /* --- STYLY PRO LOSOVAČ --- */
         textarea {
             width: 100%; height: 150px; margin: 15px 0; padding: 12px;
-            border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box;
-            resize: none; font-size: 1rem;
+            border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; resize: none; font-size: 1rem;
         }
         .main-btn {
             background-color: var(--primary-color); color: white; border: none;
             padding: 15px 25px; border-radius: 8px; cursor: pointer;
-            font-size: 1.1rem; font-weight: bold; width: 100%;
-            text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;
+            font-size: 1.1rem; font-weight: bold; width: 100%; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;
         }
         .main-btn:hover { background-color: #004085; }
         #vysledek {
@@ -95,7 +60,6 @@
         }
         .highlight { color: var(--accent-color); text-transform: uppercase; display: block; margin-top: 5px; }
 
-        /* --- STYLY PRO ÚKOLOVNÍK --- */
         .form-row { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
         .input-group { display: flex; gap: 10px; }
         input[type="text"] { flex: 1; padding: 10px; border: 2px solid #ddd; border-radius: 6px; font-size: 1rem; }
@@ -107,8 +71,7 @@
         ul { list-style: none; padding: 0; margin: 0; }
         li {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 12px; background: #f9f9f9; border-bottom: 1px solid #eee;
-            border-radius: 6px; margin-bottom: 8px;
+            padding: 12px; background: #f9f9f9; border-bottom: 1px solid #eee; border-radius: 6px; margin-bottom: 8px;
         }
         .task-left { display: flex; align-items: center; gap: 10px; }
         .completed { text-decoration: line-through; color: #aaa; }
@@ -127,15 +90,12 @@
         <img src="https://www.glovis.cz/wp-content/uploads/2021/04/logo_glovis_czech.png" alt="Hyundai Glovis Logo">
     </div>
 
-    <!-- Přepínací záložky -->
     <div class="tabs">
         <button class="tab-btn active" onclick="openTab('losovac-page', this)">Losovač jmen</button>
-        <button class="tab-btn" onclick="openTab('ukoly-page', this)">Úkolovník</button>
+        <button class="tab-btn" onclick="openTab('ukoly-page', this)">Úkolovník (Cloud)</button>
     </div>
 
     <div class="container">
-        
-        <!-- STRÁNKA: LOSOVAČ -->
         <div id="losovac-page" class="page active">
             <h2>Vylosovat pracovníka</h2>
             <p>Vložte jména (každé na nový řádek):</p>
@@ -144,16 +104,13 @@
             <div id="vysledek"></div>
         </div>
 
-        <!-- STRÁNKA: ÚKOLOVNÍK -->
         <div id="ukoly-page" class="page">
             <h2>Můj Úkolovník</h2>
-            
             <div class="form-row">
                 <div class="input-group">
                     <input type="text" id="taskInput" placeholder="Napiš nový úkol...">
                     <button class="main-btn" style="width: auto; padding: 10px 20px;" onclick="addInputTask()">Přidat</button>
                 </div>
-                
                 <div class="options-group">
                     <label><input type="radio" name="term" value="daily" checked onclick="toggleDateInput(false)"> Opakovat denně</label>
                     <label><input type="radio" name="term" value="week" onclick="toggleDateInput(false)"> Za týden</label>
@@ -161,144 +118,163 @@
                     <input type="date" id="dateInput" disabled>
                 </div>
             </div>
-
             <ul id="taskList"></ul>
         </div>
-
     </div>
 
-    <footer>
-        Created by <span style="font-weight: bold;">Thiago</span> | &copy; 2026
-    </footer>
+    <footer>Created by Thiago | &copy; 2026</footer>
 
-<script>
-    // --- LOGIKA PŘEPÍNÁNÍ ZÁLOŽEK ---
-    function openTab(pageId, btn) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        
-        document.getElementById(pageId).classList.add('active');
-        btn.classList.add('active');
-    }
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-    function toggleDateInput(enable) {
-        document.getElementById('dateInput').disabled = !enable;
-    }
+        // Tvoje údaje z Firebase projektu "Muj-portal"
+        const firebaseConfig = {
+            databaseURL: "https://muj-portal-default-rtdb.europe-west1.firebasedatabase.app"
+        };
 
-    // --- LOGIKA: LOSOVAČ ---
-    function losovat() {
-        const text = document.getElementById('seznamJmen').value;
-        const jmena = text.split('\n').map(j => j.trim()).filter(j => j !== "");
-        const vysledekDiv = document.getElementById('vysledek');
+        // Inicializace Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const tasksRef = ref(db, 'tasks/');
 
-        if (jmena.length === 0) {
-            vysledekDiv.innerHTML = "<span style='font-size: 1.2rem; color: #a94442;'>Vložte jména!</span>";
-            return;
-        }
-        const vyherce = jmena[Math.floor(Math.random() * jmena.length)];
-        vysledekDiv.innerHTML = `Vybrán:<br><span class="highlight">${vyherce}</span>`;
-    }
+        let tasks = [];
 
-    // --- LOGIKA: ÚKOLOVNÍK ---
-    let tasks = JSON.parse(localStorage.getItem('thiago_portal_tasks')) || [];
-    let lastCheckedDate = localStorage.getItem('thiago_portal_date') || "";
-
-    function checkNewDay() {
-        const today = new Date().toDateString();
-        if (lastCheckedDate !== today && lastCheckedDate !== "") {
-            tasks.forEach(task => {
-                if (task.type === 'daily') {
-                    task.completed = false; // Denní úkoly se resetují
-                }
-            });
-            saveTasks();
-        }
-        localStorage.setItem('thiago_portal_date', today);
-    }
-
-    function renderTasks() {
-        const taskList = document.getElementById('taskList');
-        taskList.innerHTML = "";
-
-        tasks.forEach((task, index) => {
-            const li = document.createElement('li');
-            const leftDiv = document.createElement('div');
-            leftDiv.className = "task-left";
-
-            const checkbox = document.createElement('input');
-            checkbox.type = "checkbox";
-            checkbox.checked = task.completed;
-            checkbox.onclick = () => toggleTask(index);
-
-            const span = document.createElement('span');
-            span.textContent = task.text;
-            if (task.completed) span.className = "completed";
-
-            leftDiv.appendChild(checkbox);
-            leftDiv.appendChild(span);
-
-            // Přidání štítků (badges) podle typu termínu
-            const badge = document.createElement('span');
-            if (task.type === 'daily') {
-                badge.className = "badge badge-daily";
-                badge.textContent = "Denní";
-            } else {
-                badge.className = "badge badge-date";
-                badge.textContent = new Date(task.dueDate).toLocaleDateString('cs-CZ');
-            }
-            leftDiv.appendChild(badge);
-
-            const deleteBtn = document.createElement('button');
-            deleteBtn.className = "delete-btn";
-            deleteBtn.innerHTML = "&times;";
-            deleteBtn.onclick = () => deleteTask(index);
-
-            li.appendChild(leftDiv);
-            li.appendChild(deleteBtn);
-            taskList.appendChild(li);
+        // NAČÍTÁNÍ Z DATABÁZE V REÁLNÉM ČASE
+        onValue(tasksRef, (snapshot) => {
+            const data = snapshot.val();
+            tasks = data ? Object.values(data) : [];
+            checkNewDay();
+            renderTasks();
         });
-    }
 
-    function addInputTask() {
-        const input = document.getElementById('taskInput');
-        if (input.value.trim() === "") return;
-
-        const termType = document.querySelector('input[name="term"]:checked').value;
-        let dueDate = null;
-        let type = 'daily';
-
-        if (termType === 'week') {
-            type = 'date';
-            let targetDate = new Date();
-            targetDate.setDate(targetDate.getDate() + 7);
-            dueDate = targetDate.toISOString();
-        } else if (termType === 'custom') {
-            type = 'date';
-            const dateVal = document.getElementById('dateInput').value;
-            if (!dateVal) {
-                alert("Vyberte prosím datum z kalendáře!");
-                return;
+        // Kontrola nového dne
+        function checkNewDay() {
+            const today = new Date().toDateString();
+            const lastCheckedDate = localStorage.getItem('thiago_cloud_date') || "";
+            
+            if (lastCheckedDate !== today && lastCheckedDate !== "" && tasks.length > 0) {
+                let changed = false;
+                tasks.forEach(task => {
+                    if (task.type === 'daily' && task.completed === true) {
+                        task.completed = false;
+                        changed = true;
+                    }
+                });
+                if (changed) saveTasksToCloud();
             }
-            dueDate = new Date(dateVal).toISOString();
+            localStorage.setItem('thiago_cloud_date', today);
         }
 
-        const newTask = { text: input.value.trim(), completed: false, type: type, dueDate: dueDate };
-        tasks.push(newTask);
-        saveTasks();
-        renderTasks();
+        // Vykreslení úkolů
+        window.renderTasks = function() {
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = "";
 
-        // Reset formuláře
-        input.value = "";
-        document.getElementById('dateInput').value = "";
-    }
+            tasks.forEach((task, index) => {
+                const li = document.createElement('li');
+                const leftDiv = document.createElement('div');
+                leftDiv.className = "task-left";
 
-    function toggleTask(index) { tasks[index].completed = !tasks[index].completed; saveTasks(); renderTasks(); }
-    function deleteTask(index) { tasks.splice(index, 1); saveTasks(); renderTasks(); }
-    function saveTasks() { localStorage.setItem('thiago_portal_tasks', JSON.stringify(tasks)); }
+                const checkbox = document.createElement('input');
+                checkbox.type = "checkbox";
+                checkbox.checked = task.completed;
+                checkbox.onclick = () => toggleTask(index);
 
-    // Inicializace
-    checkNewDay();
-    renderTasks();
-</script>
+                const span = document.createElement('span');
+                span.textContent = task.text;
+                if (task.completed) span.className = "completed";
+
+                leftDiv.appendChild(checkbox);
+                leftDiv.appendChild(span);
+
+                const badge = document.createElement('span');
+                if (task.type === 'daily') {
+                    badge.className = "badge badge-daily";
+                    badge.textContent = "Denní";
+                } else {
+                    badge.className = "badge badge-date";
+                    badge.textContent = new Date(task.dueDate).toLocaleDateString('cs-CZ');
+                }
+                leftDiv.appendChild(badge);
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = "delete-btn";
+                deleteBtn.innerHTML = "&times;";
+                deleteBtn.onclick = () => deleteTask(index);
+
+                li.appendChild(leftDiv);
+                li.appendChild(deleteBtn);
+                taskList.appendChild(li);
+            });
+        }
+
+        // Přidání úkolu
+        window.addInputTask = function() {
+            const input = document.getElementById('taskInput');
+            if (input.value.trim() === "") return;
+
+            const termType = document.querySelector('input[name="term"]:checked').value;
+            let dueDate = null;
+            let type = 'daily';
+
+            if (termType === 'week') {
+                type = 'date';
+                let targetDate = new Date();
+                targetDate.setDate(targetDate.getDate() + 7);
+                dueDate = targetDate.toISOString();
+            } else if (termType === 'custom') {
+                type = 'date';
+                const dateVal = document.getElementById('dateInput').value;
+                if (!dateVal) { alert("Vyberte datum!"); return; }
+                dueDate = new Date(dateVal).toISOString();
+            }
+
+            const id = "task_" + Date.now();
+            const newTask = { id: id, text: input.value.trim(), completed: false, type: type, dueDate: dueDate };
+            
+            set(ref(db, 'tasks/' + id), newTask);
+            input.value = "";
+            document.getElementById('dateInput').value = "";
+        }
+
+        window.toggleTask = function(index) {
+            tasks[index].completed = !tasks[index].completed;
+            saveTasksToCloud();
+        }
+
+        window.deleteTask = function(index) {
+            const taskId = tasks[index].id;
+            set(ref(db, 'tasks/' + taskId), null);
+        }
+
+        function saveTasksToCloud() {
+            const updateObj = {};
+            tasks.forEach(task => { updateObj[task.id] = task; });
+            set(tasksRef, updateObj);
+        }
+    </script>
+
+    <script>
+        // --- POMOCNÉ FUNKCE PRO STRÁNKU ---
+        function openTab(pageId, btn) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        function toggleDateInput(enable) { document.getElementById('dateInput').disabled = !enable; }
+
+        function losovat() {
+            const text = document.getElementById('seznamJmen').value;
+            const jmena = text.split('\n').map(j => j.trim()).filter(j => j !== "");
+            const vysledekDiv = document.getElementById('vysledek');
+
+            if (jmena.length === 0) { vysledekDiv.innerHTML = "Vložte jména!"; return; }
+            const vyherce = jmena[Math.floor(Math.random() * jmena.length)];
+            vysledekDiv.innerHTML = `Vybrán:<br><span class="highlight">${vyherce}</span>`;
+        }
+    </script>
 </body>
 </html>
