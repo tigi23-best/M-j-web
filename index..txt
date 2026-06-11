@@ -96,7 +96,6 @@
     </div>
 
     <div class="container">
-        <!-- LOSOVAČ -->
         <div id="losovac-page" class="page active">
             <h2>Vylosovat pracovníka</h2>
             <p>Vložte jména (každé na nový řádek):</p>
@@ -105,7 +104,6 @@
             <div id="vysledek"></div>
         </div>
 
-        <!-- ÚKOLOVNÍK -->
         <div id="ukoly-page" class="page">
             <h2>Můj Úkolovník</h2>
             <div class="form-row">
@@ -126,20 +124,20 @@
 
     <footer>Created by Thiago | &copy; 2026</footer>
 
-    <!-- PROPOJENÍ S TVOU DATABÁZÍ FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // Tvoje kompletní údaje z Firebase projektu "Muj-portal"
+        // Tvoje kompletní a ověřené údaje z Firebase projektu
         const firebaseConfig = {
-            apiKey: "SEM_VLOŽ_SVOJE_API_KEY",
+            apiKey: "AIzaSyB9LpBSjpwbNAH79_xI_7dx3NHi5iOIc7M",
             authDomain: "muj-portal.firebaseapp.com",
             databaseURL: "https://muj-portal-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "muj-portal",
-            storageBucket: "muj-portal.appspot.com",
-            messagingSenderId: "TVOJE_ČÍSLO_SENDER_ID",
-            appId: "TVOJE_ČÍSLO_APP_ID"
+            storageBucket: "muj-portal.firebasestorage.app",
+            messagingSenderId: "358183059319",
+            appId: "1:358183059319:web:62e557d8d29b4ef4672b72",
+            measurementId: "G-43DDB200DX"
         };
 
         // Inicializace Firebase
@@ -203,7 +201,6 @@
                     badge.textContent = "Denní";
                 } else {
                     badge.className = "badge badge-date";
-                    // Naformátuje datum i čas česky (např. 11. 6. 2026, 14:30)
                     badge.textContent = new Date(task.dueDate).toLocaleString('cs-CZ', {
                         day: 'numeric',
                         month: 'numeric',
