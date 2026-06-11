@@ -66,7 +66,7 @@
         
         .options-group { display: flex; flex-wrap: wrap; gap: 15px; background: #f5f5f5; padding: 10px; border-radius: 6px; align-items: center; }
         .options-group label { font-size: 0.85rem; color: #444; display: flex; align-items: center; gap: 5px; cursor: pointer; }
-        input[type="date"] { padding: 3px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; }
+        input[type="datetime-local"] { padding: 5px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; }
 
         ul { list-style: none; padding: 0; margin: 0; }
         li {
@@ -96,6 +96,7 @@
     </div>
 
     <div class="container">
+        <!-- LOSOVAČ -->
         <div id="losovac-page" class="page active">
             <h2>Vylosovat pracovníka</h2>
             <p>Vložte jména (každé na nový řádek):</p>
@@ -104,6 +105,7 @@
             <div id="vysledek"></div>
         </div>
 
+        <!-- ÚKOLOVNÍK -->
         <div id="ukoly-page" class="page">
             <h2>Můj Úkolovník</h2>
             <div class="form-row">
@@ -114,8 +116,8 @@
                 <div class="options-group">
                     <label><input type="radio" name="term" value="daily" checked onclick="toggleDateInput(false)"> Opakovat denně</label>
                     <label><input type="radio" name="term" value="week" onclick="toggleDateInput(false)"> Za týden</label>
-                    <label><input type="radio" name="term" value="custom" id="customRadio" onclick="toggleDateInput(true)"> Vybrat datum:</label>
-                    <input type="date" id="dateInput" disabled>
+                    <label><input type="radio" name="term" value="custom" id="customRadio" onclick="toggleDateInput(true)"> Vybrat čas:</label>
+                    <input type="datetime-local" id="dateInput" disabled>
                 </div>
             </div>
             <ul id="taskList"></ul>
@@ -124,26 +126,24 @@
 
     <footer>Created by Thiago | &copy; 2026</footer>
 
+    <!-- PROPOJENÍ S TVOU DATABÁZÍ FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // Tvoje údaje z Firebase projektu "Muj-portal"
+        // Tvoje kompletní údaje z Firebase projektu "Muj-portal"
         const firebaseConfig = {
-            databaseURL: "https://muj-portal-default-rtdb.europe-west1.firebasedatabase.app"
+            apiKey: "SEM_VLOŽ_SVOJE_API_KEY",
+            authDomain: "muj-portal.firebaseapp.com",
+            databaseURL: "https://muj-portal-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "muj-portal",
+            storageBucket: "muj-portal.appspot.com",
+            messagingSenderId: "TVOJE_ČÍSLO_SENDER_ID",
+            appId: "TVOJE_ČÍSLO_APP_ID"
         };
 
         // Inicializace Firebase
         const app = initializeApp(firebaseConfig);
- apiKey: "AIzaSyB9LpBSjpwbNAH79_xI_7dx3NHi5iOIc7M",
-  authDomain: "muj-portal.firebaseapp.com",
-  databaseURL: "https://muj-portal-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "muj-portal",
-  storageBucket: "muj-portal.firebasestorage.app",
-  messagingSenderId: "358183059319",
-  appId: "1:358183059319:web:62e557d8d29b4ef4672b72",
-  measurementId: "G-43DDB200DX"
-};
         const db = getDatabase(app);
         const tasksRef = ref(db, 'tasks/');
 
@@ -203,7 +203,14 @@
                     badge.textContent = "Denní";
                 } else {
                     badge.className = "badge badge-date";
-                    badge.textContent = new Date(task.dueDate).toLocaleDateString('cs-CZ');
+                    // Naformátuje datum i čas česky (např. 11. 6. 2026, 14:30)
+                    badge.textContent = new Date(task.dueDate).toLocaleString('cs-CZ', {
+                        day: 'numeric',
+                        month: 'numeric',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
                 }
                 leftDiv.appendChild(badge);
 
@@ -235,7 +242,7 @@
             } else if (termType === 'custom') {
                 type = 'date';
                 const dateVal = document.getElementById('dateInput').value;
-                if (!dateVal) { alert("Vyberte datum!"); return; }
+                if (!dateVal) { alert("Vyberte prosím datum a čas!"); return; }
                 dueDate = new Date(dateVal).toISOString();
             }
 
